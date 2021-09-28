@@ -62,7 +62,7 @@ From `PEP8` the official [style guide for python code](https://www.python.org/de
 
 # Lab summaries
 
-## lab-01 - lists and strings
+## [lab-01](./lab_01/lab_01) - lists and strings
 
 Working with **lists** and **strings** are essential python skills. 
 In the first lab session we will create a simple *shopping list*.
