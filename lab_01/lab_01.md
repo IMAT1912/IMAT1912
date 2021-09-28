@@ -1,9 +1,13 @@
-# Lab-01: Lists
+<nav>
+    <a href="/">home</a>
+</nav>
+
+# Lab-01: Lists and strings
 
 In this lab, we will build a partially functional *shopping list* application.
 The programme will allow the user to add items to a list and will output the list to the terminal each time a new item is added.
 
->Ostensibly, this lab is about lists. 
+>Ostensibly, this lab is about lists and strings. 
 However, we will be using many different features of python together in order to build a simple programme.
 
 >Going through this process as a python beginner may provide you with more questions than answers.
