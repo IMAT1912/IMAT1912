@@ -442,6 +442,21 @@ veg.print()
 
 ```
 
+>output from the above
+>```python
+>====SHOPPING LIST=====
+>|       apples       | (0)
+>|      bananas       | (1)
+>|      cherries      | (2)
+>======================
+>
+>====SHOPPING LIST=====
+>|     artichokes     | (0)
+>|      broccoli      | (1)
+>|       celery       | (2)
+>======================
+>```
+
 So we can now maintain as many separate lists as we need.
 
 ### A custom title
