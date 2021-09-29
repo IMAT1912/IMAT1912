@@ -443,7 +443,7 @@ veg.print()
 ```
 
 >output from the above
->```python
+>```
 >====SHOPPING LIST=====
 >|       apples       | (0)
 >|      bananas       | (1)
