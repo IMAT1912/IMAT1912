@@ -494,7 +494,21 @@ Now we can update our code like so:
 fruit = ShoppingList(title='fruit')
 veg = ShoppingList(title='veg')
 ```
-<div style="page-break-before:always"></div>
+
+which makes this output
+```
+========FRUIT=========
+|       apples       | (0)
+|      bananas       | (1)
+|      cherries      | (2)
+======================
+
+=========VEG==========
+|     artichokes     | (0)
+|      broccoli      | (1)
+|       celery       | (2)
+======================
+```
 
 ### Using `__str__`
 
