@@ -60,6 +60,8 @@ From `PEP8` the official [style guide for python code](https://www.python.org/de
 
 `PEP8` is an important document, you should read it!
 
+You should also be reading at least the first half of the [official python tutorial](https://docs.python.org/3/tutorial/index.html) which we will link to where appropriate.
+
 # Lab summaries
 
 ## [lab-01](./lab_01/lab_01) - lists and strings
@@ -87,4 +89,72 @@ while True:
     if not item:
         break
     shopping.append(item)
+```
+
+## [lab-02](lab_02/lab_02) - A simple `cmd` interface
+
+In this lab we will expand the shopping list into a more fully featured application.
+Users will be able to add, edit and delete items using a simple command line interface.
+
+```python
+import cmd
+
+class ShoppingList(cmd.Cmd):
+    def __init__(self, title="shopping list"):
+        self.items = []
+        self.title = title
+        self.intro = "\nMy awesome shopping list app"
+        self.prompt = "\nshopping: "
+        super().__init__()
+
+    def postcmd(self, stop, line):
+        if not line.startswith('help'):
+            print(self)
+        return stop
+
+    def do_add(self, item):
+        """Add a new item to the end of the list"""
+        self.items.append(item)
+
+    def do_quit(self, arg):
+        """Quit the shopping list programme"""
+        exit()
+
+    def _header(self, width):
+        return self.title.upper().center(width + 2, '=')
+
+    def _items(self, width):
+        if self.items:
+            return [f'|{i.center(width)}| ({n})' for n, i in enumerate(self.items)]
+        else:
+            return [f'|{"EMPTY".center(width)}|']
+
+    def _lines(self, width):
+        return [
+            "", 
+            self._header(width), 
+            *self._items(width), 
+            '=' * (width + 2)
+        ]
+
+    def __str__(self):
+        """print out the entire list"""
+        content = [self.title, *self.items]
+        lengths = [len(i) for i in content]
+        w = max([20, *lengths])
+        return '\n'.join(self._lines(w))
+        
+    def do_edit(self, args):
+        """replace the item at the given index"""
+        index, new_value = args.split(maxsplit=1)
+        index = int(index)
+        self.items[index] = new_value
+
+    def do_delete(self, index):
+        """delete the item at the given index"""
+        index = int(index)
+        del self.items[index]
+
+shopping = ShoppingList()
+shopping.cmdloop()
 ```
