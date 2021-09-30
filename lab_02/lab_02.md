@@ -81,7 +81,7 @@ Using """triple quotes""" like this is [the usual convention](https://www.python
 
 Now, let's go through the functions one by one and remind ourselves how the shopping list works.
 
-### The `create` function
+### The `'create'` function
 
 ```python
 def create(item):
@@ -104,7 +104,7 @@ print(shopping) # ['apples', 'bananas', 'cherries']
 
 Seems pretty simple so far.
 
-### The `print_list` function
+### The `'print_list'` function
 
 We ended lab-01 with some challenges.
 Here's my, slightly adjusted implementation for the `print_list()` function.
@@ -290,7 +290,7 @@ It should be clear to you how this all adds up to the output we see.
 ======================
 ```
 
-### The `update` function
+### The `'update'` function
 
 To edit an item in our list, we only need to specify which item and provide a new value.
 
@@ -306,7 +306,7 @@ We covered list indexing briefly last time.
 update(2, "cranberries")
 ```
 
-### The `delete` function
+### The `'delete'` function
 
 Deleting is similar to updating, except we need only specify the index.
 
@@ -510,7 +510,7 @@ which makes this output
 ======================
 ```
 
-### Using `__str__`
+### Using `'__str__'`
 
 Finally, we can change our `ShoppingList.print` method into a special [object.\_\_str__](https://docs.python.org/3/reference/datamodel.html#object.__str__) method to return a "*nicely printable string representation of [our] object*"
 
@@ -666,7 +666,7 @@ It also has a load of convenient and flexible functionality.
 >`cmd` is implemented in pure python if you want to have a look at the [source code](https://github.com/python/cpython/blob/3.9/Lib/cmd.py).
 Feel free to ask if there is something you want to understand in there.
 
-### What's happening, I'm confused?
+### What's happening? I'm confused!
 
 Let's walk through the core of what `cmd` does. 
 The `cmd.Cmd.cmdloop` method is an elaboration on something a bit like this:
@@ -702,9 +702,10 @@ shopping: add apples and pears
 The *command* variable becomes `'add'` and the *arg* variable is set to `'apples and pears'`.
 The string is split on the *first* space only, later spaces are ignored.
 
-The system then looks for a method named `do_[command]` and will call it, passing `arg` as the only argument.
+The system then looks for a method named `do_[command]` (i.e. `do_add`) and will call it, passing `arg` as the only argument.
 
 >[getattr](https://docs.python.org/3/library/functions.html#getattr) is a useful built in function for accessing attributes (methods in this case) based on strings.
+It allows us to construct the string `do_add` and see if we have an attribute of that name.
 >```python
 >do_command = getattr(self, f'do_{command}')
 >stop = do_command(arg)
@@ -746,7 +747,7 @@ Now try running our programme and typing `quit` as a command, the programme shou
 ### An `'add'` command
 
 If a user enters the command `'add apples'`, the `cmd.Cmd` system will look for a method named `do_add` and will pass a string `'apples'` as the argument.
-So we can change the name of our add method like this:
+So we can change the name of our existing `add` method like this:
 
 ```python
 def do_add(self, item):
@@ -754,16 +755,17 @@ def do_add(self, item):
     self.items.append(item)
 ```
 
-But the user will want to see that the list has been updated.
-In fact, we want to show the list every time we issue a command.
+This now works, but we have no way to see that it worked.
+We want to show the updated list every time a new item is added.
 
-We can do this by adding a `postcmd` method which simply prints out the list.
+Rather than implementing a `print` command, we can show the list every time we issue a command.
+We do this by adding a `postcmd` method.
 
->The `postcmd` method is called after every command is processed.
+>The `cmd.Cmd.postcmd` method is called after every command is processed.
 It receives two arguments, the value of `stop` and the `line` that was executed.
 It must return a new value for `stop`.
 We have the option to return `True` if we want to cancel the command execution.
-In our case, we simply `print` the `self` argument and return `stop` unchanged.
+In our case, we simply `print` the `self` argument (calling our existing `__str__` method) and return `stop` unchanged.
 
 ```python
 def postcmd(self, stop, line):
@@ -844,7 +846,7 @@ def postcmd(self, stop, line):
     return stop
 ```
 
-### A 'delete' command
+### A `'delete'` command
 
 
 Now, update the `delete` method to `do_delete`.
@@ -1016,7 +1018,7 @@ Only a few steps remain before we can release this to our users.
 
 Go through these and see if you can implement as many as possible before next week.
 
-## 1. Implement `load` and `save` commands
+## 1. Implement `'load'` and `'save'` commands
 
 Obviously, we really need our list to persist beween sessions.
 
@@ -1028,9 +1030,10 @@ The `save` command should open a file and write the list into it.
 >The (newish) `pathlib` library is extremely convenient for specifying paths and opening files.
 
 
-## 3. Load and save your list automatically on startup and shutdown
+## 3. Load and save your list automatically
 
-You want to load data before the command loop starts and save data when it ends.
+This should be default behaviour. We want to automatically load data and print the list before the command loop starts.
+We also want to save data when the loop exits.
 
 >Check out the `cmd` [documentation](https://docs.python.org/3/library/cmd.html) and [implementation](https://github.com/python/cpython/blob/3.9/Lib/cmd.py) for clues.
 
@@ -1047,3 +1050,6 @@ Handle all the exceptions raised by this set of commands entered in order:
 - `edit 1 apple`
 - `delete apple`
 - `delete 1`
+
+If this is too much, don't worry. 
+We will cover exceptions next week.
