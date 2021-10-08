@@ -1,7 +1,3 @@
-<nav>
-    <a href="../">home</a>
-</nav>
-
 # Lab-01: Lists and strings
 
 In this lab, we will build a partially functional *shopping list* application.
