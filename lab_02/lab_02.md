@@ -1030,26 +1030,27 @@ The `save` command should open a file and write the list into it.
 >The (newish) `pathlib` library is extremely convenient for specifying paths and opening files.
 
 
-## 3. Load and save your list automatically
+## 2. Load and save your list automatically
 
 This should be default behaviour. We want to automatically load data and print the list before the command loop starts.
 We also want to save data when the loop exits.
 
 >Check out the `cmd` [documentation](https://docs.python.org/3/library/cmd.html) and [implementation](https://github.com/python/cpython/blob/3.9/Lib/cmd.py) for clues.
 
-## 4. Add a 'clear' command
+## 3. Add a `'clear'` command
 Now we have a persistent list, its useful to have a simple command to clear the whole list.
 
-## 5. Handle exceptions
+## 4. Handle exceptions
 There are many exceptions that will be raised if we enter invalid commands.
 
 Handle all the exceptions raised by this set of commands entered in order:
 - `clear`
 - `edit apple`
 - `edit apple apple`
-- `edit 1 apple`
+- `edit 10 apple`
 - `delete apple`
-- `delete 1`
+- `delete 10`
 
 If this is too much, don't worry. 
-We will cover exceptions next week.
+We will spend all of next week's session going through these challenges.
+So try to complete as many as possible.
