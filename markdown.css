@@ -1,0 +1,43 @@
+p {
+    margin: 1.2em 0;
+}
+
+blockquote {
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    margin: 0.25em 0;
+    padding: 0.25em 0.5em;
+    overflow: auto;
+}
+
+blockquote p {
+    margin: 0.5em 0;
+}
+
+pre, blockquote {
+    page-break-inside: avoid;
+}
+code {
+    font-size: 0.9em;
+    line-height: 1.6em;
+}
+:not(pre):not(.hljs) > code {
+    color:hsl(20, 100%, 30%)
+}
+
+h1 {
+    page-break-before: always;
+}
+h2 {
+    font-size: 1.8em;
+    font-weight: normal;
+}
+h3 {
+    font-size: 1.6em;
+}
+h4 {
+    font-size: 1.4em;
+    font-weight: normal;
+}
+
+
