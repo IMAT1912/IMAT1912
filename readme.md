@@ -64,7 +64,7 @@ You should also be reading at least the first half of the [official python tutor
 
 # Lab summaries
 
-## [lab-01](./lab_01/lab_01) - lists and strings
+## lab-01 - lists and strings
 
 Working with **lists** and **strings** are essential python skills. 
 In the first lab session we will create a simple *shopping list*.
@@ -91,7 +91,7 @@ while True:
     shopping.append(item)
 ```
 
-## [lab-02](lab_02/lab_02) - A simple `cmd` interface
+## lab-02 - A simple `cmd` interface
 
 In this lab we will expand the shopping list into a more fully featured application.
 Users will be able to add, edit and delete items using a simple command line interface.
@@ -158,3 +158,38 @@ class ShoppingList(cmd.Cmd):
 shopping = ShoppingList()
 shopping.cmdloop()
 ```
+
+## lab-03 - Exception handling
+
+The code we created above is fragile and prone to errors.
+If our users provide a slightly wrong command, the programme crashes in a bad way.
+
+In this lab, we will study the error messages and learn how to handle them.
+
+
+## lab-04 - Introducing `tkinter`
+
+We want to develop a graphical user interface (GUI) for our our shopping lis application.
+In this lab we will introduce the `tkinter` module.
+
+You challenge will be to build the GUI yourself.
+
+## lab-05 - Introducing `tkinter`
+
+In this lab we will use the `tkinter` module to build an interface for the shopping list application.
+
+## lab_06: The datetime module - a countdown timer
+
+Moving on from the shopping list, we will look at the datetime module and consider a simple coundown timer application.
+
+## lab_07: A tkinter countdown timer
+
+In this lab, we will build a `tkinter` GUI around the simple countodown timer.
+
+## lab_08: Assignment support
+
+The final two lab sessions are reserved for providing direct support with your assignment code. 
+
+## lab_09: Assignment support
+
+The final two lab sessions are reserved for providing direct support with your assignment code. 
