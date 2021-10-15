@@ -11,12 +11,14 @@ This is a good thing.
 
 >Make sure you ask whenever something surprises you or if you want to clarify a generalisation.
 
-> Also, elaborate on the provided examples and play around with python to check your understanding and see what you can do.
+>Also, elaborate on the provided examples and play around with python to check your understanding and see what you can do.
 
 
 ## Setup
 
 Create a file `/path/to/IMAT1912-labs/lab_01/lab_01.py`.
+
+>On windows, this would be `C:\path\to\IMAT1912-labs\lab_01\lab_01.py` or similar.
 
 >Remember, this is the folder structure you should be working in 
 >```
@@ -53,8 +55,14 @@ First we need to change to the appropriate directory.
 ```bash
 cd /path/to/IMAT1912-labs/lab_01
 ```
-
 > your path will be different, depending on where you have created the `IMAT1912-labs` folder.
+
+>On windows, this would be
+>```bash
+>cd C:\path\to\IMAT1912-labs\lab_01` 
+>```
+
+
 
 We can execute the programme like this:
 
