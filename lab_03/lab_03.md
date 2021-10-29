@@ -14,12 +14,16 @@ fruit.add('apples')
 fruit.add('bananas')
 fruit.add('cherries')
 print(fruit)
+```
 
-# ====SHOPPING LIST=====
-# |       apples       | (0)
-# |      bananas       | (1)
-# |      cherries      | (2)
-# ======================
+Generating formatted output on the console
+
+```
+====SHOPPING LIST=====
+|       apples       | (0)
+|      bananas       | (1)
+|      cherries      | (2)
+======================
 ```
 
 Finally, we inherited functionality from the `cmd` module to give our class a command line interface (CLI) specifying the commands `'quit'`, `'add'`, `'edit'` and `'delete'`.
@@ -66,6 +70,8 @@ Traceback (most recent call last):
     index, new_value = args.split(maxsplit=1)
 ValueError: not enough values to unpack (expected 2, got 1)
 ```
+
+This is not acceptable for our users, we never want them to see this technical stuff.
 
 In this lab, we will study the error messages and learn how to handle them.
 But first, we presented some other challenges at the end of the last session.
@@ -509,7 +515,7 @@ def do_clear(self, args):
 Our app is looking pretty good.
 But it relies on the user getting commands perfect.
 
-## 4. Handle exceptions
+# Handling exceptions
 
 Let's turn our attention to what happens when things aren't so perfect.
 Our code is fragile, the commands we have defined need perfect input in order to work properly.
@@ -521,7 +527,7 @@ In order to write robust python code, you will need to understand this in some d
 We will start by handling errors in the `do_edit` method because it is the most complicated. 
 Then, we will generalise our solution and apply it to the other functions as necessary.
 
-### ValueError: not enough values to unpack
+## ValueError: not enough values to unpack
 
 Start the app and clear the list.
 
@@ -539,9 +545,7 @@ Now do this:
 shopping: edit apple
 ```
 
-
 The command is invalid because we need two values, an integer index followed by a new value for the item in question.
-
 The resulting error tells us what happened
 
 ```
@@ -556,18 +560,24 @@ Traceback (most recent call last):
     index, new_value = args.split(maxsplit=1)
 ValueError: not enough values to unpack (expected 2, got 1)
 ```
+>Your output may be slightly different, but you can trace through your error in exactly the same way.
 
 Learning to read error messages is a crucial skill.
 Study the output and try to understand what it is saying.
 
-Let's break it down:
+Let's break it down.
+The first line is a simple introduction to the `traceback` that follows.
 
 ```
 Traceback (most recent call last):
 ```
 
-This is a clue.
+This contains an important clue.
 We might want to look at the last item to see what really went wrong.
+
+The following four entries show the key lines of code that led to the error and should help us to diagnose and fix the problem.
+
+Each entry looks something like this:
 
 ```
   File "lab_03.py", line 95, in <module>
@@ -577,45 +587,52 @@ We might want to look at the last item to see what really went wrong.
 This is the entry point to the problem within our code.
 We called the `cmdloop()` method on line 95 of `lab_03.py` (your line may be slightly different) and it had not finished executing when the error occured. 
 
-But the error occurred deeper in our code.
+But the error occurred deeper in the code.
+In fact, the traceback passes through the `cmd` module code before it gets back to our code.
 
 ```
   File "/usr/lib/python3.8/cmd.py", line 138, in cmdloop
     stop = self.onecmd(line)
 ```
-The `cmdloop()` method calls `onecmd(line)` internally when the user enters a command.
-We can see that this occurred in the `cmd` library (and that my system is running python 3.8!).
+The `cmdloop()` method calls `onecmd(line)` internally each time the user enters a command.
+We can see that this occurred on line 138 in the `cmd.py` module (and that my system is running python 3.8!).
+This code eventually leads to our `do_edit` method being called.
+
+The next entry in the error message shows another step in the process.
 
 ```
   File "/usr/lib/python3.8/cmd.py", line 217, in onecmd
     return func(arg)
 ```
 Again, this is part of the `cmd` library.
-The `onecmd()` method calls the found function, as discussed last week.
-The found function in this case, is our `do_edit` method.
+The `onecmd()` method finds the requested function (`func`, in this case refers to our `do_edit` function).
+It calls the function and passes in the provided arguments (`arg`).
+We discussed this last week.
+
+So finally, the error trace points to our function.
 
 ```
   File "lab_03.py", line 80, in do_edit
     index, new_value = args.split(maxsplit=1)
 ```
 
-OK, this is what we expected to see. 
-The last problem listed is the "most recent call last" alluded to above.
-This is where we tried to split the `args` string into two variables, `index` and `new_value`.
+This is the "most recent call last" alluded to above.
+The offending expression (line 80) is shown very clearly.
+We can see that we tried to split the `args` string into two variables, `index` and `new_value`.
 
 >The error tells us the exact file and line where the problem occurred.
 >
 >```python
 >def do_edit(self, args):
 >    """replace the item at the given index"""
->    index, new_value = args.split(maxsplit=1)
+>    index, new_value = args.split(maxsplit=1) # <-- here
 >    index = int(index)
 >    self.items[index] = new_value
 >```
 >This is the offending function
 >The error is caused because in this case, the value of `args` is `'apple'` so the result of `args.split(maxsplit=1)` is a list with only one element.
 >
->When we attempt to [unpack](https://docs.python.org/3/tutorial/datastructures.html#tuples-and-sequences) the list into two variables, a `ValueError` exception is raised.
+>When we attempt to [unpack](https://docs.python.org/3/tutorial/datastructures.html#tuples-and-sequences) the list (`['apple']`) into two variables, a `ValueError` exception is raised.
 
 The final line of the error trace shows the actual exception that was raised by this code when the user entered only one argument.
 
@@ -626,7 +643,10 @@ ValueError: not enough values to unpack (expected 2, got 1)
 This is the crucial information we can use to [handle the error](https://docs.python.org/3/tutorial/errors.html#handling-exceptions).
 We need to wrap the dangerous code in a `try` statement with an `except` clause to handle the `ValueError`.
 
-There isn't much we can do if the user enters a bad command.
+>We don't always want to handle exceptions, sometimes they are useful in our code to indicate that we have done something wrong.
+
+In this case, there isn't much we can do if the user enters a bad command.
+We cannot avoid this situation and we want to handle it gracefully.
 So we will simply print out a message and stop processing the request.
 
 ```python
@@ -640,8 +660,11 @@ def do_edit(self, args):
     index = int(index)
     self.items[index] = new_value
 ```
+Everything inside a `try` statement will be subject to the error handler. 
+The `except` clause will only run if the given error is raised in the code which is *protected* by the `try` statement.
+`ValueError` is a built-in object that is specifically designed for this particular task.
 
-The `except` clause will only run if the given error is raised.
+>We can also raise our own `ValueError` if we want to indicate e.g. that an argument provided to a function has an invalid value.
 
 Now, restart the app and try again. 
 You should get a helpful message and, crucially, the app no longer crashes but continues processing commands.
@@ -654,14 +677,19 @@ shopping: edit apple
 invalid request - two values needed
 ```
 
-### ValueError: invalid literal for int()
+Our users can now identify what happened and correct the mistake or enter different command.
 
-But, what happens if we enter two values, but the first is not an integer?
+## ValueError: invalid literal for int()
+
+The index provided by the user needs to be an integer. 
+Try entering an invalid index like this:
 
 ```
 My awesome shopping list app
 
 shopping: edit apple apple
+```
+```
   File "lab_03.py", line 99, in <module>
     shopping.cmdloop()
   File "/usr/lib/python3.8/cmd.py", line 138, in cmdloop
@@ -673,15 +701,17 @@ shopping: edit apple apple
 ValueError: invalid literal for int() with base 10: 'apple'
 ```
 
+We can see a familiar pattern here, the traceback shows tha path our code took before the exception was raised.
+
 >Notice the last entries
 >```
 >File "lab_03.py", line 85, in do_edit
 >  index = int(index)
 >ValueError: invalid literal for int() with base 10: 'apple'
 >```
+>The line is now 85, because we added some lines in the previous step.
 
-As expected, the attempt to do `int('apple')` raised another exception.
-Again, a `ValueError`.
+As expected, the attempt to do `int('apple')` raised another `ValueError` exception.
 We can handle it in a similar way by putting the code that raises the exception in a `try` block and adding an `except` clause to handle the specific exception.
 
 ```python
@@ -712,7 +742,7 @@ invalid request - index must be an integer
 
 Now, we have just one more serious problem.
 
-### IndexError: list assignment index out of range
+## IndexError: list assignment index out of range
 
 What if the index argument is a valid integer, but its too big? 
 What if we ask to edit a value beyond the end of our list?
@@ -721,6 +751,8 @@ Try this:
 
 ```
 shopping: edit 10 apple
+```
+```
 Traceback (most recent call last):
   File "lab_03.py", line 103, in <module>
     shopping.cmdloop()
@@ -739,7 +771,7 @@ IndexError: list assignment index out of range
 >    self.items[index] = new_value
 >IndexError: list assignment index out of range
 >```
->OK, it looks like we tried to set a value beyond the size of the list.
+>OK, it looks like we tried to set a value (assign) to an index beyond the size of the list.
 
 We can't reference `self.items[10]` when the list is empty.
 When we try, an `IndexError` exception is raised.
@@ -775,6 +807,9 @@ def do_edit(self, args):
 >print(f"invalid request - try one of {list(range(len(self.items)))}")
 >```
 >This actually lists out all the valid indices.
+>
+>Choosing good error messages is difficult.
+>It requires thinking about who the user is and what information they need.
 
 Our code is becoming rather cluttered now. 
 But the last few errors will give us some opportunity to refactor.
@@ -783,6 +818,8 @@ Try entering this:
 
 ```
 shopping: delete apple
+```
+```
 Traceback (most recent call last):
   File "lab_03.py", line 108, in <module>
     shopping.cmdloop()
@@ -880,4 +917,18 @@ Read through the code and make sure you understand each method individually.
 
 ## Challenges
 
-Try to find some other 
+Study the following programme and understand what it does.
+
+```python
+print('remember to get some "apples"')
+print('remember to get some "bananas"')
+print('remember to get some "cherries"')
+```
+
+There is repetition here.
+Can you refactor it?
+>Try to use a pythonic style.
+
+Next week we will looking at the `tkinter` GUI library.
+
+Research the `tkinter` system and try to build something with it.
