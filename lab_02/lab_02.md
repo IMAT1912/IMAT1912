@@ -3,11 +3,14 @@
 In this lab we will take the rudimentary shopping list from lab-01 and expand it with more capabilities.
 
 We will introduce functionality from the python `cmd` module to create a simple commandline interface.
-This will allow our users (we care about our users) to access the full functionality of the shopping list without writing any python code.
+This will allow our users (we care about our users) to access the full functionality of the shopping list without requiring them to write any python code.
 
 ## Setup
 
 Create a file `/path/to/IMAT1912-labs/lab_02/lab_02.py`.
+
+>On windows, this would be `C:\path\to\IMAT1912-labs\lab_02\lab_02.py` or similar.
+
 
 >Remember, this is the folder structure you should be working in 
 >```
@@ -333,9 +336,15 @@ When used with a list item, the [del](https://docs.python.org/3/tutorial/datastr
 
 ## Stop and think
 
-So, now we have the full list of four functions, we can experiment a bit by writing a simple script at the end of our file.
+So, now we have the full list of four functions for the classic CRUD operations (Create, Read, Update and Destroy).
+These functions control access to our list and make it easy to write code to create a list.
+
+We can experiment a bit by writing a simple script which uses our shopping list code.
+Create a new file `user.py` in the `lab_02` folder and enter the following code.
 
 ```python
+from lab_02 import create, update, delete, print_list, shopping
+
 create("python")
 create("is")
 create("complicated")
@@ -354,19 +363,33 @@ create("experiment to discover")
 create("ask questions to clarify")
 print_list(shopping)
 ```
-> We have covered a lot of ground in a short time.
-If you have any questions or comments about anything we have covered, now is a good time to articulate them.
+
+In our new file, we are importing our shopping list code and creating an actual shopping list as if we were a user of the system.
+
+Note that the implementation and naming of the various functions will determine the code needed to create a specific shopping list.
+In other words, we are writing an application programmable interface (API) for our users.
+We need to consider our users' experience when we define our API.
+
+>In many cases **you** will be your only user.
+This doesn't mean you shouldn't care about good API design.
+
+We have separated the roles of API developer and API consumer into our two python modules. The `lab_02.py` module defines the API and the `user.py` module is where we put some example code that consumes the API.
+
+>If you have any questions or comments about anything we have covered so far, now is a good time to articulate them.
 
 ## We can do better
 
-Our `shopping` list has no connection with the functions, other than they require it to exist.
-Most of our functions are directly editing the list.
+Our `shopping` list API is implemented with four separate functions, three of which are directly accessing the module-level variable, `shopping`.
 Our `print_list` function is different, it doesn't reference the `shopping` list at all.
 This seems like an advantage.
-We could pass in any list of strings to the function and it would dutifully print out the list as requested.
-The other functions are more tied into the specific list `shopping` declared at the top of the file.
 
-A great way to keep functions tied to particular data is to create a [class](https://docs.python.org/3/tutorial/classes.html#class-objects) to hold both the data and the functions.
+We could pass in any list of strings to the function and it would dutifully print out the list as requested.
+The other functions are tied directly into the specific list `shopping` declared at the top of the file.
+
+This is a bit confusing.
+Could we make all the functions general purpose in the same way?
+
+A great way to define functions which are tied to particular data is to create a [class](https://docs.python.org/3/tutorial/classes.html#class-objects) to hold both the data and the functions.
 
 We can start by creating a class with an `__init__` method.
 The `__init__` method is called every time we create a new `instance` of the class.
@@ -423,9 +446,11 @@ We also changed the names of the functions.
 >The first name we think of for a method is not always a good one.
 Try using your code for a bit and if your class and function names don't make sense, change them.
 
-Now we can do a neat trick.
+Now, we can do a neat trick in our `user.py` file.
 
 ```python
+from lab_02 import ShoppingList
+
 fruit = ShoppingList()
 veg = ShoppingList()
 
@@ -998,9 +1023,6 @@ The `do_edit` method is the most complex.
 We need to split the provided string into two parts, the first argument should be an integer and the remainder is the string to set as the item value. 
 Once split (using [str.split()](https://docs.python.org/3/library/stdtypes.html#str.split)), the index is cast to an integer using [int()](https://docs.python.org/3/library/functions.html#int).
 
-
-## Conclusion
-
 Try running the programme and calling the allowed commands.
 
 - `add apples`
@@ -1013,6 +1035,17 @@ Try running the programme and calling the allowed commands.
 
 We now have the basis for a complete shopping list project.
 Only a few steps remain before we can release this to our users.
+
+## Conclusion
+
+We have covered a lot of territory in this lab. 
+In particular, we have introduced [classes](https://docs.python.org/3/tutorial/classes.html) which allow us to develop our own object types with our own methods.
+We also introduced a number of special so-called [dunder methods](https://docs.python.org/3/reference/datamodel.html#special-method-names) ([\_\_init__](https://docs.python.org/3/reference/datamodel.html#object.__init__) and [\_\_str__](https://docs.python.org/3/reference/datamodel.html#object.__str__)) which have a special meaning and allow access to special syntax.
+
+We also demonstrated [inheritance](https://docs.python.org/3/tutorial/classes.html#inheritance) which allowed us to easily create a command line interpreter inheriting core functionality from the [cmd](https://docs.python.org/3/library/cmd.html) module.
+
+Making use of the python standard library is important. 
+The standard library code is battle tested and written by people who know how to write excellent python code.
 
 # Challenges
 
@@ -1040,17 +1073,3 @@ We also want to save data when the loop exits.
 ## 3. Add a `'clear'` command
 Now we have a persistent list, its useful to have a simple command to clear the whole list.
 
-## 4. Handle exceptions
-There are many exceptions that will be raised if we enter invalid commands.
-
-Handle all the exceptions raised by this set of commands entered in order:
-- `clear`
-- `edit apple`
-- `edit apple apple`
-- `edit 10 apple`
-- `delete apple`
-- `delete 10`
-
-If this is too much, don't worry. 
-We will spend all of next week's session going through these challenges.
-So try to complete as many as possible.
