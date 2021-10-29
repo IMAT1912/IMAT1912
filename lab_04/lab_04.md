@@ -57,7 +57,7 @@ class MyApplication(tk.Tk):
 
 Notice we specify the `text` as an argument when we create a `tk.Label` instance.
 We also need to call `grid()` on each label in order to register it with the `grid` geometry manager.
-We will use the `grid` geometry manager thoughout this lab to position all our widgets.
+We will use the `grid` geometry manager throughout this lab to position all our widgets.
 
 At the end of our script, we can now actually create an instance and start the tkinter main loop like this.
 
@@ -342,7 +342,7 @@ We also set `columnspan` and `rowspan` accordingly.
 Make sure you understand what happened here.
 
 >Notice, I also removed the top/bottom padding from the entry widget to make it sit between the label and the listbox padding.
-Obviously, you can experiment to make it sook however you want.
+Obviously, you can experiment to make it look however you want.
 
 ![Nicely positioned widgets](images/step_05.png)
 
@@ -416,7 +416,7 @@ This will allow us to access the text in the entry more easily.
 
 >The `tk.StringVar` (and equivalent numeric values) system is useful when different widgets need to share the same data.
 >
->In this case it provides us with an easy way to read the data from the entrty widget.
+>In this case it provides us with an easy way to read the data from the entry widget.
 >```python
 >entered_text = self.item.get()
 >```
