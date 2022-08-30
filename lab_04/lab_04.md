@@ -191,6 +191,14 @@ We can update widget configuration at any time using the generic widget [configu
 
 Clicking on the button will now update the button text to reflect the click count.
 
+>It's important to understand that when we create our widgets, they only exist in memory and will not be shown in the app.
+>They only appear when we call `grid()` (or something equivalent).
+>
+>The `grid()` method also tells our app where the widget should be placed.
+>
+>In the next lab we will see that we can manage widgets behind the scenes and show/hide them whenever we want.
+
+
 ## Listbox and entry widgets
 
 The `tk.Listbox` widget holds a list of strings.
@@ -205,7 +213,6 @@ The user must be able to enter text and click an 'add' button to add a new item 
 We also want to allow the user to select an item in the list and to update or delete the selected item by clicking either the 'update' or 'delete' button.
 
 So, we need:
-
 - a label with the application title
 - a listbox, containing our items
 - an entry field for specifying new and updated items
